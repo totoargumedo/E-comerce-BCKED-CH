@@ -35,10 +35,10 @@ class Cart {
   }
 
   newCart(product) {
-    id++;
+    this.id++;
     const newCart = {
       id: this.id,
-      timestamp: new Date.now(),
+      timestamp: Date.now(),
       products: [product],
     };
     this.fileContent.push(newCart);
@@ -65,7 +65,7 @@ class Cart {
     if (cartIndex === -1) {
       throw new Error(`El carrito no existe`);
     }
-    return this.fileContent[cartIndex].products, this.fileContent[cartIndex].id;
+    return this.fileContent[cartIndex].products;
   }
 
   deleteCart(id) {
@@ -90,7 +90,7 @@ class Cart {
       throw new Error(`El carrito no existe`);
     }
     this.fileContent[cartIndex].products.splice(productIndex, 1);
-    this.write();
+    this.write(this.fileContent);
     return cartId;
   }
 }

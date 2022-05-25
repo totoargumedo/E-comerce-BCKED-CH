@@ -12,18 +12,30 @@ const server = app.listen(PORT, () => {
 
 server.on(`error`, (error) => console.log(`Server error:${error}`));
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // routers
-app.use(`/api/productos`, require(`./controllers/productsRouter`));
-app.use(`/api/carrito`, require(`./controllers/cartRouter`));
+const { routerProducts } = require(`./controllers/productsRouter`);
+app.use(`/api/productos`, routerProducts);
+
+const { routerCart } = require(`./controllers/cartRouter`);
+app.use(`/api/carrito`, routerCart);
 
 // statics
 app.use(express.static(`public`));
 
-// requests
-app.get(`/`, (req, res) => {
-  res.sendFile(`index.html`);
+//middlewares
+app.use(function (req, res) {
+  res.status(404).json({
+    error: -2,
+    description: `ruta no implementada`,
+    path: req.path,
+    method: req.method,
+  });
 });
 
-// admin options
-
-let administrador = false;
+// requests
+app.get(`/`, (req, res) => {
+  res.status(200).sendFile(`index.html`);
+});
