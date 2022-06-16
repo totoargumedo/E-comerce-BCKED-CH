@@ -6,6 +6,8 @@ import * as productosModel from "../database/models/producto.js";
 class Productos {
   constructor(URL) {
     this.URL = URL;
+    this.collection = productosModel;
+    this.connect();
   }
 
   async connect() {
@@ -27,11 +29,11 @@ class Productos {
 
   async saveProduct(product) {
     const newProduct = { ...product, timestamp: Date.now() };
-    return await productosModel.productos.create(newProduct);
+    return await this.collection.productos.create(newProduct);
   }
 
   async modify(id, product) {
-    const productFind = await productosModel.productos.findByIdAndUpdate(
+    const productFind = await this.collection.productos.findByIdAndUpdate(
       { _id: id },
       product
     );
@@ -39,7 +41,7 @@ class Productos {
   }
 
   async modifyStock(id, stock) {
-    const productFind = await productosModel.productos.findByIdAndUpdate(
+    const productFind = await this.collection.productos.findByIdAndUpdate(
       { _id: id },
       { $set: { stock: stock } }
     );
@@ -47,15 +49,15 @@ class Productos {
   }
 
   async getAll() {
-    return await productosModel.productos.find({});
+    return await this.collection.productos.find({});
   }
 
   async getById(id) {
-    return await productosModel.productos.find({ _id: id });
+    return await this.collection.productos.find({ _id: id });
   }
 
   async deleteById(id) {
-    const productFind = await productosModel.productos.findByIdAndDelete({
+    const productFind = await this.collection.productos.findByIdAndDelete({
       _id: id,
     });
 
@@ -63,7 +65,7 @@ class Productos {
   }
 
   async deleteAll() {
-    return await productosModel.productos.deleteMany({});
+    return await this.collection.productos.deleteMany({});
   }
 }
 

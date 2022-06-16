@@ -35,23 +35,6 @@ app.use(function (req, res) {
   });
 });
 
-// DB connection
-
-const URL =
-  "mongodb+srv://admin:mongo2487!@cluster0.r9sh6o3.mongodb.net/?retryWrites=true&w=majority";
-connect();
-async function connect() {
-  try {
-    await mongoose.connect(URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log(`Conexion a la DB ${URL} establecida`);
-  } catch (error) {
-    throw new Error(`Hubo un error al conectarse a ${URL}: ${error}`);
-  }
-}
-
 // requests
 app.get(`/`, (req, res) => {
   res.status(200).sendFile(`index.html`);

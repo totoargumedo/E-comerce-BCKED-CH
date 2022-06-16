@@ -6,6 +6,8 @@ import * as cartModel from "../database/models/carrito.js";
 class Cart {
   constructor(URL) {
     this.URL = URL;
+    this.collection = cartModel;
+    this.connect();
   }
 
   async connect() {
@@ -30,11 +32,11 @@ class Cart {
       timestamp: Date.now(),
       productos: [],
     };
-    return await cartModel.carritos.create(newCart);
+    return await this.collection.carritos.create(newCart);
   }
 
   async addToCart(id, productById) {
-    const cartFind = await cartModel.carritos.findByIdAndUpdate(
+    const cartFind = await this.collection.carritos.findByIdAndUpdate(
       { _id: id },
       { $push: { productos: productById } }
     );
@@ -42,19 +44,22 @@ class Cart {
   }
 
   async getCarts() {
-    return await cartModel.carritos.find({});
+    return await this.collection.carritos.find({});
   }
 
   async getCartProducts(id) {
-    return await cartModel.carritos.find({ _id: id }, { _id: 0, productos: 1 });
+    return await this.collection.carritos.find(
+      { _id: id },
+      { _id: 0, productos: 1 }
+    );
   }
 
   async deleteCart(id) {
-    return await cartModel.carritos.findByIdAndDelete({ _id: id });
+    return await this.collection.carritos.findByIdAndDelete({ _id: id });
   }
 
   async deleteCartProduct(cartId, productId) {
-    const cartFind = await cartModel.carritos.findByIdAndUpdate(
+    const cartFind = await this.collection.carritos.findByIdAndUpdate(
       { _id: cartId },
       { $pull: { _id: productId } }
     );

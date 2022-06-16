@@ -35,22 +35,6 @@ app.use(function (req, res) {
   });
 });
 
-// DB connection
-
-const URL = "mongodb://localhost:27017/ecommerce";
-connect();
-async function connect() {
-  try {
-    await mongoose.connect(URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log(`Conexion a la DB ${URL} establecida`);
-  } catch (error) {
-    throw new Error(`Hubo un error al conectarse a ${URL}: ${error}`);
-  }
-}
-
 // requests
 app.get(`/`, (req, res) => {
   res.status(200).sendFile(`index.html`);
